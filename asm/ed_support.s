@@ -39,6 +39,8 @@
 .export _solid_line
 .export _scroll_up
 .export _scroll_dn
+.export _inverse
+.export _normal
 
 .import popa
 
@@ -77,6 +79,9 @@ PAGE2ON     = $C055
 
 LC_ROMIN    = $C082
 LC_BANK2_RO = $C080
+
+INVERSE_ROM = $FE80
+NORMAL_ROM  = $FE84
 
 
 ;
@@ -177,6 +182,28 @@ _text:
 
 _crout:
         ROM_CALL CROUT_ROM
+        rts
+
+
+;
+; ---------------------------------------------------------------------------
+; inverse()
+; ---------------------------------------------------------------------------
+;
+
+_inverse:
+        ROM_CALL INVERSE_ROM
+        rts
+
+
+;
+; ---------------------------------------------------------------------------
+; normal()
+; ---------------------------------------------------------------------------
+;
+
+_normal:
+        ROM_CALL NORMAL_ROM
         rts
 
 

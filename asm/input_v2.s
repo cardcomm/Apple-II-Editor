@@ -25,7 +25,10 @@
 .export INPUT1_1
 .export RD_KEY
 .export INIT_INP
-.export BELL
+.export _bell
+
+_bell:
+        jmp BELL
 
 .export START_POS
 .export INP_STAT

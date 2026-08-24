@@ -1,5 +1,5 @@
 TARGET = apple2enh
-OUT = ED.bin
+OUT = ED
 LOADADDR = 2000
 AUXTYPE = 0020
 
@@ -11,7 +11,21 @@ all:
 		-Wl -S,0x$(LOADADDR) \
 		-Wl -D,__EXEHDR__=0 \
 		-m ed.map \
-		ed_support_test.c \
+		ed.c \
+		edit.c \
+		misc.c \
+		drawscrn.c \
+		fillvport.c \
+		strings.c \
+		waitkey.c \
+		scroll.c \
+		load.c \
+		save.c \
+		clip.c \
+		cmds.c \
+		search.c \
+		input_c_wrapper.s \
+		input_v2.s \
 		ed_support.s \
 		-o $(OUT)
 	mv -f "$(OUT)" "$(DEST)"
