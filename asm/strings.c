@@ -1,10 +1,11 @@
 
 
+#include <string.h>
 #include	"ed.h"
 
 #define		SPACE		0x20
 
-char*	ck_spaces();
+char* ck_spaces(char* str_ptr, char size);
 char	tabstops[]	= {	4,4,4,4,8,8,8,8,12,12,12,12,16,16,16,16,\
 								20,20,20,20,24,24,24,24,28,28,28,28,\
 
@@ -198,9 +199,7 @@ char*	src;
 		printf("no spaces found");
 */
 
-char*	ck_spaces(str_ptr, size)
-char*	str_ptr;
-char	size;
+char* ck_spaces(char* str_ptr, char size)
 {
 	register	int		spc_count;
 	register	char*	tmp_ptr;
