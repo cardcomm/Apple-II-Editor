@@ -29,7 +29,6 @@ void init_ed(margc, margv)
 int	margc;
 char*	margv[];
 {
-
 	home();
 	init_array(file1.index);
 	init_array(file2.index);
@@ -51,12 +50,12 @@ char*	margv[];
 	strcpy(file1.name, margv[1]);
 
 	message("Loading: ");	println(file1.name);
-	load_file(file1.name, file1.index);	/* load	file1  */
-
+	load_file(&file1);	/* load	file1  */
+	
 	if(margc == 3)	{
 		strcpy(file2.name, margv[2]);
 		message("Loading: "); println(file2.name);
-		load_file(file2.name, file2.index);	/* load	file2  */
+		load_file(&file2);	/* load	file2  */
 		div_line = 12;
 	}
 

@@ -1,5 +1,6 @@
 
 #include	<stdio.h>
+#include 	<apple2.h>
 #include	"ed.h"
 
 extern	char*	cursor_y;
@@ -52,14 +53,17 @@ struct	fileinfo*	fip;
 	line_num++;
 	fip->index[line_num] = 0;
 
-	if((dfile =	fopen(fip->name, "w")) == NULL)	{
-		message("Cannot open file from write !");
+	_filetype = PRODOS_T_TXT;
+	_auxtype  = PRODOS_AUX_T_TXT_SEQ;
+
+if((dfile = fopen(fip->name, "w")) == NULL) {
+		message("Cannot open file for write !");
 		return(-1);
 		}
 
 	line_num = 0;
 	while (	fip->index[line_num] !=	0 )	{
-		if(fputs(fip->index[line_num], dfile)) {
+		if(fputs(fip->index[line_num], dfile) == EOF) { 
 			message("Cannot write to file !");
 			return(-1);
 		}

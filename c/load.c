@@ -24,6 +24,54 @@ void drawscrn();
 
 
 /*
+ * cc65 compatibility:
+ *
+ * The original Aztec C fgets() used by this editor treated the
+ * ProDOS CR ($0D) line terminator as the end of an input line.
+ *
+ * cc65 fgets() does not.  It looks for the C newline character
+ * LF ($0A), so a CR-delimited ProDOS TXT file is read in buffer-
+ * sized chunks instead of one source line at a time.
+ *
+ * Read one CR-delimited ProDOS source line here to preserve the
+ * behavior expected by the original editor.  The CR is retained
+ * because the editor's internal packed-line representation is:
+ *
+ *     line contents + CR + NUL
+ *
+ * The editor is designed around a maximum physical line length
+ * of 80 columns and does not support wrapped source lines.
+ */
+static char* get_cr_line(char* string, int size, FILE* dfile)
+{
+    int c;
+    int i;
+
+    i = 0;
+
+    while(i < size - 1) {
+
+        c = fgetc(dfile);
+
+        if(c == EOF) {
+            if(i == 0)
+                return NULL;
+
+            break;
+        }
+
+        string[i++] = (char)c;
+
+        if(c == '\r')
+            break;
+    }
+
+    string[i] = 0;
+
+    return string;
+}
+
+/*
     func. to prompt user for filename then call the load_file func.
     pass a pointer to the current fileinfo structure.
 */
@@ -66,7 +114,6 @@ struct fileinfo* fip;
     drawscrn();
 }
 
-
 /*
     function to load source file from the disk
 
@@ -91,25 +138,31 @@ struct fileinfo* fip;
      * Get strings from the file and allocate memory to put them into.
      */
 
-    line_num = 0;
-
-    while(!feof(dfile) && line_num < max_lines) {
-
-        if(fgets(string, 80, dfile)) {
-
-            if(!(fip->index[line_num] = getmem(string))) {
-                message("file to large!");
-                break;
-            }
-
-            strcpy(
-                fip->index[line_num],
-                string
-            );
-
-            line_num++;
-        }
-    }
+	line_num = 0;
+	
+	while(!feof(dfile) && line_num < max_lines) {
+	
+		/*
+		 * cc65 compatibility:
+		 * Use the CR-delimited reader above instead of fgets().
+		 * See get_cr_line() for the difference from the original
+		 * Aztec C runtime behavior.
+		 */
+		if(get_cr_line(string, 80, dfile)) {
+	
+			if(!(fip->index[line_num] = getmem(string))) {
+				message("file to large!");
+				break;
+			}
+	
+			strcpy(
+				fip->index[line_num],
+				string
+			);
+	
+			line_num++;
+		}
+	}
 
     if(fclose(dfile) != 0) {
         message("Cannot close file from read !");
@@ -121,3 +174,4 @@ struct fileinfo* fip;
     fip->edline = 1;
     fip->dist_dwn = 1;
 }
+
