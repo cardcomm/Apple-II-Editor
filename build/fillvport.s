@@ -16,19 +16,7 @@
 	.import		_vport_top
 	.import		_vport_bot
 	.import		_expand_string
-	.export		_debug_vport_top
-	.export		_debug_dist_dwn
-	.export		_debug_cur_ycor
 	.export		_fill_vport
-
-.segment	"BSS"
-
-_debug_vport_top:
-	.res	1,$00
-_debug_dist_dwn:
-	.res	1,$00
-_debug_cur_ycor:
-	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; unsigned char __near__ fill_vport (__near__ struct fileinfo *)
@@ -127,20 +115,6 @@ L000B:	lda     _vport_top
 	ldx     _vport_top+1
 	ldy     #$00
 	jsr     ldauidx
-	sta     _debug_vport_top
-	ldy     #$5C
-	jsr     ldaxysp
-	jsr     pushax
-	ldx     #$04
-	lda     #$00
-	jsr     tosaddax
-	ldy     #$2B
-	jsr     ldauidx
-	sta     _debug_dist_dwn
-	lda     _vport_top
-	ldx     _vport_top+1
-	ldy     #$00
-	jsr     ldauidx
 	jsr     pushax
 	ldy     #$5E
 	jsr     ldaxysp
@@ -154,10 +128,6 @@ L000B:	lda     _vport_top
 	ldx     #$00
 	ldy     #$52
 	sta     (sp),y
-	ldy     #$52
-	ldx     #$00
-	lda     (sp),y
-	sta     _debug_cur_ycor
 	ldy     #$5A
 	jsr     ldaxysp
 	jsr     pushax
@@ -244,8 +214,8 @@ L000B:	lda     _vport_top
 	ldx     #$00
 	ldy     #$53
 	jsr     staxysp
-	jmp     L0024
-L0022:	lda     #$00
+	jmp     L001E
+L001C:	lda     #$00
 	jsr     pusha
 	ldy     #$54
 	lda     (sp),y
@@ -262,10 +232,10 @@ L0022:	lda     #$00
 	ldy     #$01
 	jsr     ldaxidx
 	cpx     #$00
-	bne     L002F
+	bne     L0029
 	cmp     #$00
-L002F:	jsr     boolne
-	jeq     L002C
+L0029:	jsr     boolne
+	jeq     L0026
 	lda     sp
 	ldx     sp+1
 	jsr     pushax
@@ -284,16 +254,16 @@ L002F:	jsr     boolne
 	lda     sp
 	ldx     sp+1
 	jsr     _print
-	jmp     L0036
-L002C:	jsr     _blank_line
-L0036:	ldy     #$56
+	jmp     L0030
+L0026:	jsr     _blank_line
+L0030:	ldy     #$56
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0039
+	bne     L0033
 	inx
-L0039:	ldy     #$55
+L0033:	ldy     #$55
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
@@ -302,13 +272,13 @@ L0039:	ldy     #$55
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L003B
+	bne     L0035
 	inx
-L003B:	ldy     #$53
+L0035:	ldy     #$53
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-L0024:	ldy     #$56
+L001E:	ldy     #$56
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$5E
@@ -320,25 +290,25 @@ L0024:	ldy     #$56
 	ldy     #$30
 	jsr     ldaxidx
 	jsr     tosleax
-	jeq     L0026
+	jeq     L0020
 	ldy     #$56
 	jsr     ldaxysp
 	cmp     #$F5
 	txa
 	sbc     #$01
-	bvc     L0027
+	bvc     L0021
 	eor     #$80
-L0027:	asl     a
+L0021:	asl     a
 	lda     #$00
 	ldx     #$00
 	rol     a
-	jne     L0025
-L0026:	ldx     #$00
+	jne     L001F
+L0020:	ldx     #$00
 	lda     #$00
-	jeq     L0028
-L0025:	ldx     #$00
+	jeq     L0022
+L001F:	ldx     #$00
 	lda     #$01
-L0028:	jne     L0022
+L0022:	jne     L001C
 	ldy     #$52
 	ldx     #$00
 	lda     (sp),y

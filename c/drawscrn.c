@@ -25,8 +25,8 @@ void	drawscrn()		{
 	gotoxy(0,div_line);
 	solid_line();
 	*vport_bot = div_line;
-
-	file1.curln_ycor = debug_fill_vport_return;
+	
+	file1.curln_ycor = fill_vport(&file1);
 
 	*vport_top = div_line+1;	/* draw	the	bottom viewport	*/
 	*vport_bot = 23;

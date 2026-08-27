@@ -1038,10 +1038,6 @@ LAST_XCOR:
 CURRENT:
         .res 1
 
-CURSOR:
-        .res 1
-
-
 YTMP:
         .res 1
 
@@ -1059,3 +1055,9 @@ DURATION:
 
 PITCH:
         .res 1
+        
+        
+.segment "DATA"
+
+CURSOR:
+        .byte INVERSE_SPACE

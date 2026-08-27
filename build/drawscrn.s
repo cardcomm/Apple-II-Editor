@@ -19,17 +19,8 @@
 	.import		_vport_bot
 	.import		_div_line
 	.import		_vport_actv
-	.export		_debug_fill_vport_return
-	.export		_debug_file1_curln_ycor
 	.import		_fill_vport
 	.export		_drawscrn
-
-.segment	"BSS"
-
-_debug_fill_vport_return:
-	.res	1,$00
-_debug_file1_curln_ycor:
-	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ drawscrn (void)
@@ -69,22 +60,16 @@ _debug_file1_curln_ycor:
 	lda     #<(_file1)
 	ldx     #>(_file1)
 	jsr     _fill_vport
-	sta     _debug_fill_vport_return
-	ldx     #$00
-	lda     _debug_fill_vport_return
 	sta     _file1+1068
-	ldx     #$00
-	lda     _file1+1068
-	sta     _debug_file1_curln_ycor
 	lda     _vport_top
 	ldx     _vport_top+1
 	jsr     pushax
 	ldx     #$00
 	lda     _div_line
 	ina
-	bne     L001A
+	bne     L0016
 	inx
-L001A:	ldx     #$00
+L0016:	ldx     #$00
 	ldy     #$00
 	jsr     staspidx
 	lda     _vport_bot
@@ -100,13 +85,13 @@ L001A:	ldx     #$00
 	sta     _file2+1068
 	ldx     #$00
 	lda     _vport_actv
-	jmp     L0021
-L0021:	cmp     #$01
-	jeq     L0024
+	jmp     L001D
+L001D:	cmp     #$01
+	jeq     L0020
 	cmp     #$02
-	jeq     L002D
-	jmp     L0022
-L0024:	lda     _vport_top
+	jeq     L0029
+	jmp     L001E
+L0020:	lda     _vport_top
 	ldx     _vport_top+1
 	jsr     pushax
 	ldx     #$00
@@ -124,16 +109,16 @@ L0024:	lda     _vport_top
 	jsr     pusha
 	lda     _file1+1068
 	jsr     _gotoxy
-	jmp     L0022
-L002D:	lda     _vport_top
+	jmp     L001E
+L0029:	lda     _vport_top
 	ldx     _vport_top+1
 	jsr     pushax
 	ldx     #$00
 	lda     _div_line
 	ina
-	bne     L0030
+	bne     L002C
 	inx
-L0030:	ldx     #$00
+L002C:	ldx     #$00
 	ldy     #$00
 	jsr     staspidx
 	lda     _vport_bot
@@ -147,8 +132,8 @@ L0030:	ldx     #$00
 	jsr     pusha
 	lda     _file2+1068
 	jsr     _gotoxy
-	jmp     L0022
-L0022:	rts
+	jmp     L001E
+L001E:	rts
 
 .endproc
 

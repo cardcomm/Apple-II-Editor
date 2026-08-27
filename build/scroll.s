@@ -15,26 +15,8 @@
 	.import		_vport_bot
 	.import		_scroll_up
 	.import		_scroll_dn
-	.export		_debug_move_ycor
-	.export		_debug_move_top
-	.export		_debug_move_bot
-	.export		_debug_move_dist
-	.export		_debug_move_edline
 	.export		_move_dn
 	.export		_move_up
-
-.segment	"BSS"
-
-_debug_move_ycor:
-	.res	1,$00
-_debug_move_top:
-	.res	1,$00
-_debug_move_bot:
-	.res	1,$00
-_debug_move_dist:
-	.res	1,$00
-_debug_move_edline:
-	.res	2,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ move_dn (__near__ struct fileinfo *)
@@ -53,53 +35,15 @@ _debug_move_edline:
 	ldx     #$04
 	lda     #$00
 	jsr     tosaddax
-	ldy     #$2C
-	jsr     ldauidx
-	sta     _debug_move_ycor
-	lda     _vport_top
-	ldx     _vport_top+1
-	ldy     #$00
-	jsr     ldauidx
-	sta     _debug_move_top
-	lda     _vport_bot
-	ldx     _vport_bot+1
-	ldy     #$00
-	jsr     ldauidx
-	sta     _debug_move_bot
-	ldy     #$01
-	jsr     ldaxysp
-	jsr     pushax
-	ldx     #$04
-	lda     #$00
-	jsr     tosaddax
-	ldy     #$2B
-	jsr     ldauidx
-	sta     _debug_move_dist
-	ldy     #$01
-	jsr     ldaxysp
-	jsr     pushax
-	ldx     #$04
-	lda     #$00
-	jsr     tosaddax
-	ldy     #$2A
-	jsr     ldaxidx
-	sta     _debug_move_edline
-	stx     _debug_move_edline+1
-	ldy     #$01
-	jsr     ldaxysp
-	jsr     pushax
-	ldx     #$04
-	lda     #$00
-	jsr     tosaddax
 	ldy     #$2A
 	jsr     ldaxidx
 	cpx     #$01
-	bne     L0010
+	bne     L0006
 	cmp     #$F3
-L0010:	jsr     booleq
-	jeq     L000E
-	jmp     L001B
-L000E:	ldy     #$01
+L0006:	jsr     booleq
+	jeq     L0004
+	jmp     L0011
+L0004:	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -108,15 +52,15 @@ L000E:	ldy     #$01
 	ldy     #$2C
 	jsr     ldauidx
 	ina
-	bne     L0013
+	bne     L0009
 	inx
-L0013:	jsr     pushax
+L0009:	jsr     pushax
 	lda     _vport_bot
 	ldx     _vport_bot+1
 	ldy     #$00
 	jsr     ldauidx
 	jsr     tosultax
-	jeq     L0011
+	jeq     L0007
 	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
@@ -150,9 +94,9 @@ L0013:	jsr     pushax
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0016
+	bne     L000C
 	inx
-L0016:	ldy     #$01
+L000C:	ldy     #$01
 	clc
 	pha
 	lda     #$04
@@ -195,8 +139,8 @@ L0016:	ldy     #$01
 	ldy     #$2C
 	jsr     ldauidx
 	jsr     _gotoxy
-	jmp     L001B
-L0011:	jsr     _scroll_up
+	jmp     L0011
+L0007:	jsr     _scroll_up
 	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
@@ -209,9 +153,9 @@ L0011:	jsr     _scroll_up
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L001E
+	bne     L0014
 	inx
-L001E:	ldy     #$01
+L0014:	ldy     #$01
 	clc
 	pha
 	lda     #$04
@@ -233,7 +177,7 @@ L001E:	ldy     #$01
 	ldy     #$2C
 	jsr     ldauidx
 	jsr     _gotoxy
-L001B:	jsr     incsp2
+L0011:	jsr     incsp2
 	rts
 
 .endproc
@@ -258,12 +202,12 @@ L001B:	jsr     incsp2
 	ldy     #$2A
 	jsr     ldaxidx
 	cpx     #$00
-	bne     L0025
+	bne     L001B
 	cmp     #$00
-L0025:	jsr     booleq
-	jeq     L0023
-	jmp     L002E
-L0023:	ldy     #$01
+L001B:	jsr     booleq
+	jeq     L0019
+	jmp     L0024
+L0019:	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -277,7 +221,7 @@ L0023:	ldy     #$01
 	ldy     #$00
 	jsr     ldauidx
 	jsr     tosugtax
-	jeq     L0026
+	jeq     L001C
 	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
@@ -354,8 +298,8 @@ L0023:	ldy     #$01
 	ldy     #$2C
 	jsr     ldauidx
 	jsr     _gotoxy
-	jmp     L002E
-L0026:	jsr     _scroll_dn
+	jmp     L0024
+L001C:	jsr     _scroll_dn
 	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
@@ -390,7 +334,7 @@ L0026:	jsr     _scroll_dn
 	ldy     #$2C
 	jsr     ldauidx
 	jsr     _gotoxy
-L002E:	jsr     incsp2
+L0024:	jsr     incsp2
 	rts
 
 .endproc

@@ -21,19 +21,13 @@
 	.import		_bell
 	.import		_message
 	.import		_waitkey
-	.export		_debug_curln_ycor
 	.export		_edit
 
 .segment	"RODATA"
 
-L0067:
+L0063:
 	.byte	$46,$69,$6C,$65,$20,$65,$72,$72,$6F,$72,$2E,$00
-L0035	:=	L0067+0
-
-.segment	"BSS"
-
-_debug_curln_ycor:
-	.res	1,$00
+L0033	:=	L0063+0
 
 ; ---------------------------------------------------------------
 ; __near__ struct inpstat * __near__ edit (__near__ struct fileinfo *)
@@ -120,15 +114,6 @@ L0018:	jsr     pushax
 	lda     #$00
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$06
-	jsr     ldaxysp
-	jsr     pushax
-	ldx     #$04
-	lda     #$00
-	jsr     tosaddax
-	ldy     #$2C
-	jsr     ldauidx
-	sta     _debug_curln_ycor
 	lda     #$00
 	jsr     pusha
 	ldy     #$07
@@ -168,23 +153,23 @@ L0018:	jsr     pushax
 	ldy     #$02
 	jsr     staxysp
 	cpx     #$00
-	bne     L002C
+	bne     L002A
 	cmp     #$00
-L002C:	jsr     booleq
-	jeq     L002E
-	jmp     L002F
-L002D:	jsr     _bell
-	lda     #<(L0035)
-	ldx     #>(L0035)
+L002A:	jsr     booleq
+	jeq     L002C
+	jmp     L002D
+L002B:	jsr     _bell
+	lda     #<(L0033)
+	ldx     #>(L0033)
 	jsr     _message
 	jsr     _waitkey
-L002F:	jsr     _quit
+L002D:	jsr     _quit
 	cpx     #$FF
-	bne     L0032
+	bne     L0030
 	cmp     #$FF
-L0032:	jsr     booleq
-	jne     L002D
-L002E:	ldy     #$06
+L0030:	jsr     booleq
+	jne     L002B
+L002C:	ldy     #$06
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
@@ -229,7 +214,7 @@ L002E:	ldy     #$06
 	jsr     ldaxysp
 	ldy     #$03
 	jsr     ldauidx
-	jeq     L003F
+	jeq     L003D
 	ldy     #$06
 	jsr     ldaxysp
 	jsr     pushax
@@ -244,7 +229,7 @@ L002E:	ldy     #$06
 	pla
 	ldy     #$34
 	jsr     staspidx
-L003F:	ldy     #$06
+L003D:	ldy     #$06
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$03
@@ -260,7 +245,7 @@ L003F:	ldy     #$06
 	pla
 	ldy     #$33
 	jsr     staspidx
-	jmp     L0045
+	jmp     L0043
 L0008:	lda     #<(L0005)
 	ldx     #>(L0005)
 	jsr     pushax
@@ -282,15 +267,6 @@ L0008:	lda     #<(L0005)
 	ldy     #$01
 	jsr     ldaxidx
 	jsr     _expand_string
-	ldy     #$06
-	jsr     ldaxysp
-	jsr     pushax
-	ldx     #$04
-	lda     #$00
-	jsr     tosaddax
-	ldy     #$2C
-	jsr     ldauidx
-	sta     _debug_curln_ycor
 	lda     #$00
 	jsr     pusha
 	ldy     #$07
@@ -348,23 +324,23 @@ L0008:	lda     #<(L0005)
 	ldy     #$02
 	jsr     staxysp
 	cpx     #$00
-	bne     L005E
+	bne     L005A
 	cmp     #$00
-L005E:	jsr     booleq
-	jeq     L0060
-	jmp     L0061
-L005F:	jsr     _bell
-	lda     #<(L0067)
-	ldx     #>(L0067)
+L005A:	jsr     booleq
+	jeq     L005C
+	jmp     L005D
+L005B:	jsr     _bell
+	lda     #<(L0063)
+	ldx     #>(L0063)
 	jsr     _message
 	jsr     _waitkey
-L0061:	jsr     _quit
+L005D:	jsr     _quit
 	cpx     #$FF
-	bne     L0064
+	bne     L0060
 	cmp     #$FF
-L0064:	jsr     booleq
-	jne     L005F
-L0060:	ldy     #$06
+L0060:	jsr     booleq
+	jne     L005B
+L005C:	ldy     #$06
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
@@ -409,7 +385,7 @@ L0060:	ldy     #$06
 	jsr     ldaxysp
 	ldy     #$03
 	jsr     ldauidx
-	jeq     L0071
+	jeq     L006D
 	ldy     #$06
 	jsr     ldaxysp
 	jsr     pushax
@@ -424,7 +400,7 @@ L0060:	ldy     #$06
 	pla
 	ldy     #$34
 	jsr     staspidx
-L0071:	ldy     #$06
+L006D:	ldy     #$06
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$03
@@ -440,7 +416,7 @@ L0071:	ldy     #$06
 	pla
 	ldy     #$33
 	jsr     staspidx
-L0045:	ldy     #$01
+L0043:	ldy     #$01
 	jsr     ldaxysp
 	jmp     L0003
 L0003:	jsr     incsp7
