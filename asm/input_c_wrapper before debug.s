@@ -97,7 +97,6 @@ _editline:
 ;
 
 _editline2:
-
         sta START_POS
 
         ; maxlength is now the top stacked argument.
@@ -131,4 +130,3 @@ _editline2:
 
 MAX_LENGTH:
         .res 1
-        

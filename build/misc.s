@@ -34,15 +34,15 @@
 
 .segment	"RODATA"
 
-L005B:
+L006E:
 	.byte	$4F,$75,$74,$20,$6F,$66,$20,$6D,$65,$6D,$6F,$72,$79,$20,$65,$72
 	.byte	$72,$6F,$72,$21,$00
-L006D:
+L0080:
 	.byte	$4F,$75,$74,$20,$6F,$66,$20,$6D,$65,$6D,$6F,$72,$79,$20,$65,$72
 	.byte	$72,$6F,$72,$2E,$00
-L002D:
+L0038:
 	.byte	$4C,$6F,$61,$64,$69,$6E,$67,$3A,$20,$00
-L001F	:=	L002D+0
+L001E	:=	L0038+0
 
 ; ---------------------------------------------------------------
 ; void __near__ init_array (__near__ unsigned char * *)
@@ -60,20 +60,20 @@ L001F	:=	L002D+0
 	lda     #$00
 	ldy     #$00
 	jsr     staxysp
-L0045:	ldy     #$01
+L0058:	ldy     #$01
 	jsr     ldaxysp
 	cmp     #$F4
 	txa
 	sbc     #$01
-	bvc     L004C
+	bvc     L005F
 	eor     #$80
-L004C:	asl     a
+L005F:	asl     a
 	lda     #$00
 	ldx     #$00
 	rol     a
-	jne     L0048
-	jmp     L0046
-L0048:	ldy     #$03
+	jne     L005B
+	jmp     L0059
+L005B:	ldy     #$03
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$03
@@ -90,14 +90,14 @@ L0048:	ldy     #$03
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L004E
+	bne     L0061
 	inx
-L004E:	ldy     #$00
+L0061:	ldy     #$00
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	jmp     L0045
-L0046:	jsr     incsp4
+	jmp     L0058
+L0059:	jsr     incsp4
 	rts
 
 .endproc
@@ -150,20 +150,6 @@ L0046:	jsr     incsp4
 	jsr     _init_array
 	jsr     _init_clip
 	ldx     #$00
-	lda     #$01
-	sta     _file1+1065
-	stx     _file1+1065+1
-	ldx     #$00
-	lda     #$01
-	sta     _file2+1065
-	stx     _file2+1065+1
-	ldx     #$00
-	lda     #$01
-	sta     _file1+1067
-	ldx     #$00
-	lda     #$01
-	sta     _file2+1067
-	ldx     #$00
 	lda     #$00
 	sta     _file1+1076
 	ldx     #$00
@@ -175,6 +161,18 @@ L0046:	jsr     incsp4
 	ldx     #$00
 	lda     #$00
 	sta     _file2+1075
+	ldy     #$03
+	jsr     ldaxysp
+	cmp     #$02
+	txa
+	sbc     #$00
+	bvs     L0014
+	eor     #$80
+L0014:	asl     a
+	lda     #$00
+	ldx     #$00
+	rol     a
+	jeq     L0012
 	lda     #<(_file1)
 	ldx     #>(_file1)
 	jsr     pushax
@@ -183,8 +181,15 @@ L0046:	jsr     incsp4
 	ldy     #$03
 	jsr     ldaxidx
 	jsr     _strcpy
-	lda     #<(L001F)
-	ldx     #>(L001F)
+	ldx     #$00
+	lda     #$01
+	sta     _file1+1065
+	stx     _file1+1065+1
+	ldx     #$00
+	lda     #$01
+	sta     _file1+1067
+	lda     #<(L001E)
+	ldx     #>(L001E)
 	jsr     _message
 	lda     #<(_file1)
 	ldx     #>(_file1)
@@ -192,13 +197,24 @@ L0046:	jsr     incsp4
 	lda     #<(_file1)
 	ldx     #>(_file1)
 	jsr     _load_file
-	ldy     #$03
+	jmp     L0024
+L0012:	ldx     #$00
+	lda     #$00
+	sta     _file1
+	ldx     #$00
+	lda     #$00
+	sta     _file1+1065
+	stx     _file1+1065+1
+	ldx     #$00
+	lda     #$00
+	sta     _file1+1067
+L0024:	ldy     #$03
 	jsr     ldaxysp
 	cpx     #$00
-	bne     L0027
+	bne     L002E
 	cmp     #$03
-L0027:	jsr     booleq
-	jeq     L0025
+L002E:	jsr     booleq
+	jeq     L002C
 	lda     #<(_file2)
 	ldx     #>(_file2)
 	jsr     pushax
@@ -207,8 +223,15 @@ L0027:	jsr     booleq
 	ldy     #$05
 	jsr     ldaxidx
 	jsr     _strcpy
-	lda     #<(L002D)
-	ldx     #>(L002D)
+	ldx     #$00
+	lda     #$01
+	sta     _file2+1065
+	stx     _file2+1065+1
+	ldx     #$00
+	lda     #$01
+	sta     _file2+1067
+	lda     #<(L0038)
+	ldx     #>(L0038)
 	jsr     _message
 	lda     #<(_file2)
 	ldx     #>(_file2)
@@ -219,7 +242,18 @@ L0027:	jsr     booleq
 	ldx     #$00
 	lda     #$0C
 	sta     _div_line
-L0025:	jsr     incsp4
+	jmp     L0040
+L002C:	ldx     #$00
+	lda     #$00
+	sta     _file2
+	ldx     #$00
+	lda     #$00
+	sta     _file2+1065
+	stx     _file2+1065+1
+	ldx     #$00
+	lda     #$00
+	sta     _file2+1067
+L0040:	jsr     incsp4
 	rts
 
 .endproc
@@ -238,8 +272,8 @@ L0025:	jsr     incsp4
 	ldx     #$00
 	lda     #$00
 	jsr     pushax
-	jmp     L0039
-L0037:	ldy     #$03
+	jmp     L004C
+L004A:	ldy     #$03
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
@@ -261,9 +295,9 @@ L0037:	ldy     #$03
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0041
+	bne     L0054
 	inx
-L0041:	ldy     #$02
+L0054:	ldy     #$02
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
@@ -274,7 +308,7 @@ L0041:	ldy     #$02
 	lda     #$00
 	ldy     #$00
 	jsr     staxspidx
-L0039:	ldy     #$03
+L004C:	ldy     #$03
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
@@ -289,7 +323,7 @@ L0039:	ldy     #$03
 	lda     (ptr1),y
 	iny
 	ora     (ptr1),y
-	jne     L0037
+	jne     L004A
 	jsr     incsp4
 	rts
 
@@ -311,24 +345,24 @@ L0039:	ldy     #$03
 	jsr     ldaxysp
 	jsr     _strlen
 	ina
-	bne     L0059
+	bne     L006C
 	inx
-L0059:	jsr     _malloc
+L006C:	jsr     _malloc
 	ldy     #$00
 	jsr     staxysp
 	jsr     bnegax
-	jeq     L0053
-	lda     #<(L005B)
-	ldx     #>(L005B)
+	jeq     L0066
+	lda     #<(L006E)
+	ldx     #>(L006E)
 	jsr     _message
 	jsr     _waitkey
 	ldx     #$00
 	lda     #$00
-	jmp     L0052
-L0053:	ldy     #$01
+	jmp     L0065
+L0066:	ldy     #$01
 	jsr     ldaxysp
-	jmp     L0052
-L0052:	jsr     incsp4
+	jmp     L0065
+L0065:	jsr     incsp4
 	rts
 
 .endproc
@@ -352,24 +386,24 @@ L0052:	jsr     incsp4
 	jsr     ldaxysp
 	jsr     _strlen
 	ina
-	bne     L006B
+	bne     L007E
 	inx
-L006B:	jsr     _malloc
+L007E:	jsr     _malloc
 	ldy     #$00
 	jsr     staxysp
 	jsr     bnegax
-	jeq     L0065
-	lda     #<(L006D)
-	ldx     #>(L006D)
+	jeq     L0078
+	lda     #<(L0080)
+	ldx     #>(L0080)
 	jsr     _message
 	jsr     _waitkey
 	ldx     #$00
 	lda     #$00
-	jmp     L0062
-L0065:	ldy     #$01
+	jmp     L0075
+L0078:	ldy     #$01
 	jsr     ldaxysp
-	jmp     L0062
-L0062:	jsr     incsp6
+	jmp     L0075
+L0075:	jsr     incsp6
 	rts
 
 .endproc

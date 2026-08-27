@@ -22,7 +22,7 @@ struct	fileinfo*	fip;
 	register	int		count;
 	register	int		y;
 	register	char	cur_ycor; /* ycor current source line was printed at */
-				char	dest[81];
+				char	dest[82];
 
 	vport_lines	= *vport_bot - *vport_top;
 	if(fip->dist_dwn > vport_lines)
@@ -31,6 +31,7 @@ struct	fileinfo*	fip;
 		fip->dist_dwn =	fip->edline;
 
 	cur_ycor = *vport_top +	fip->dist_dwn;
+
 	bot_part = vport_lines - fip->dist_dwn;	/* calc. # of scrn lines below
 											   current line	 */
 	fip->topline = fip->edline - fip->dist_dwn;

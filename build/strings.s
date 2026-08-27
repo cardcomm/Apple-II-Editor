@@ -449,23 +449,23 @@ L0091:	asl     a
 .segment	"CODE"
 
 	jsr     pushax
-	ldy     #$5C
+	ldy     #$5D
 	jsr     subysp
 	lda     sp
 	ldx     sp+1
 	jsr     pushax
-	ldy     #$5F
+	ldy     #$60
 	jsr     ldaxysp
 	jsr     _strcpy
-	ldy     #$5F
+	ldy     #$60
 	jsr     ldaxysp
-	ldy     #$55
+	ldy     #$56
 	jsr     staxysp
 	lda     sp
 	ldx     sp+1
-	ldy     #$53
+	ldy     #$54
 	jsr     staxysp
-L00A3:	ldy     #$54
+L00A3:	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
@@ -473,56 +473,56 @@ L00A3:	ldy     #$54
 	jsr     boolne
 	jne     L00A5
 	jmp     L00A4
-L00A5:	ldy     #$54
+L00A5:	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00A9
 	inx
-L00A9:	ldy     #$53
+L00A9:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
 	jmp     L00A3
-L00A4:	ldy     #$54
+L00A4:	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	jsr     decax1
-	ldy     #$53
+	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
 	jmp     L00AD
-L00AB:	ldy     #$54
+L00AB:	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	jsr     decax1
-	ldy     #$53
+	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-L00AD:	ldy     #$54
+L00AD:	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	cmp     #$20
 	jsr     booleq
 	jne     L00AB
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00B1
 	inx
-L00B1:	ldy     #$53
+L00B1:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$00
@@ -531,22 +531,22 @@ L00B1:	ldy     #$53
 	jsr     staspidx
 	lda     sp
 	ldx     sp+1
-	ldy     #$53
+	ldy     #$54
 	jsr     staxysp
+	ldx     #$00
+	lda     #$00
+	ldy     #$5A
+	sta     (sp),y
 	ldx     #$00
 	lda     #$00
 	ldy     #$59
 	sta     (sp),y
-	ldx     #$00
-	lda     #$00
-	ldy     #$58
-	sta     (sp),y
-L00B8:	ldy     #$54
+L00B8:	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	jeq     L00BF
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
@@ -561,7 +561,7 @@ L00BE:	ldx     #$00
 L00C0:	jne     L00BB
 	jmp     L00B9
 L00BA:	jmp     L00B8
-L00BB:	ldy     #$54
+L00BB:	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
@@ -573,7 +573,7 @@ L00C2:	cmp     #$20
 	cmp     #$27
 	jeq     L00DC
 	jmp     L0123
-L00C5:	ldy     #$59
+L00C5:	ldy     #$5A
 	ldx     #$00
 	lda     (sp),y
 	cmp     #$00
@@ -581,107 +581,107 @@ L00C5:	ldy     #$59
 	jeq     L00C6
 	ldx     #$00
 	lda     #$01
-	ldy     #$59
+	ldy     #$5A
 	sta     (sp),y
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00CD
 	inx
-L00CD:	ldy     #$55
+L00CD:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00CF
 	inx
-L00CF:	ldy     #$53
+L00CF:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
 	jmp     L00D1
 L00C6:	ldx     #$00
 	lda     #$00
-	ldy     #$59
+	ldy     #$5A
 	sta     (sp),y
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00D7
 	inx
-L00D7:	ldy     #$55
+L00D7:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00D9
 	inx
-L00D9:	ldy     #$53
+L00D9:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
 L00D1:	jmp     L00C3
-L00DC:	ldy     #$54
+L00DC:	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	cmp     #$27
 	jsr     booleq
 	jeq     L00E0
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$01
 	jsr     ldauidx
 	cmp     #$20
 	jsr     booleq
 	jeq     L00E0
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	ldy     #$02
 	jsr     ldauidx
@@ -696,9 +696,9 @@ L00DE:	ldx     #$00
 L00E3:	jeq     L00DD
 	ldx     #$00
 	lda     #$00
-	ldy     #$5A
+	ldy     #$5B
 	jsr     staxysp
-L00E4:	ldy     #$5B
+L00E4:	ldy     #$5C
 	jsr     ldaxysp
 	cmp     #$03
 	txa
@@ -711,144 +711,144 @@ L00EB:	asl     a
 	rol     a
 	jne     L00E7
 	jmp     L00E5
-L00E7:	ldy     #$56
+L00E7:	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00F1
 	inx
-L00F1:	ldy     #$55
+L00F1:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00F3
 	inx
-L00F3:	ldy     #$53
+L00F3:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00ED
 	inx
-L00ED:	ldy     #$5A
+L00ED:	ldy     #$5B
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
 	jmp     L00E4
 L00E5:	jmp     L00F5
-L00DD:	ldy     #$56
+L00DD:	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00F9
 	inx
-L00F9:	ldy     #$55
+L00F9:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L00FB
 	inx
-L00FB:	ldy     #$53
+L00FB:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
 L00F5:	jmp     L00C3
-L00FE:	ldy     #$59
+L00FE:	ldy     #$5A
 	lda     (sp),y
 	jeq     L00FF
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L0104
 	inx
-L0104:	ldy     #$55
+L0104:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L0106
 	inx
-L0106:	ldy     #$53
+L0106:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
 	jmp     L00C3
 L00FF:	lda     #<(_tabstops)
 	ldx     #>(_tabstops)
-	ldy     #$58
+	ldy     #$59
 	clc
 	adc     (sp),y
 	bcc     L010B
@@ -856,165 +856,165 @@ L00FF:	lda     #<(_tabstops)
 L010B:	ldy     #$00
 	jsr     ldauidx
 	jsr     pushax
-	ldy     #$5A
+	ldy     #$5B
 	ldx     #$00
 	lda     (sp),y
 	jsr     tossubax
 	ldx     #$00
-	ldy     #$57
+	ldy     #$58
 	sta     (sp),y
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$59
+	ldy     #$5A
 	lda     (sp),y
 	jsr     _ck_spaces
-	ldy     #$51
+	ldy     #$52
 	jsr     staxysp
 	cpx     #$00
 	bne     L0112
 	cmp     #$00
 L0112:	jsr     booleq
 	jeq     L010C
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L0116
 	inx
-L0116:	ldy     #$55
+L0116:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L0118
 	inx
-L0118:	ldy     #$53
+L0118:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
 	jmp     L011A
-L010C:	ldy     #$56
+L010C:	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$00
 	lda     #$09
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L011E
 	inx
-L011E:	ldy     #$55
+L011E:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$52
-	jsr     ldaxysp
 	ldy     #$53
+	jsr     ldaxysp
+	ldy     #$54
 	jsr     staxysp
-	ldy     #$57
+	ldy     #$58
 	ldx     #$00
 	lda     (sp),y
 	ldx     #$00
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	clc
 	adc     (sp),y
 	sta     (sp),y
 L011A:	jmp     L00C3
-L0123:	ldy     #$56
+L0123:	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$54
+	ldy     #$55
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L0127
 	inx
-L0127:	ldy     #$53
+L0127:	ldy     #$54
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L0129
 	inx
-L0129:	ldy     #$55
+L0129:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$58
+	ldy     #$59
 	ldx     #$00
 	lda     (sp),y
 	pha
 	ina
-	ldy     #$58
+	ldy     #$59
 	sta     (sp),y
 	pla
 	jmp     L00C3
 L00C3:	jmp     L00BA
-L00B9:	ldy     #$56
+L00B9:	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$00
 	lda     #$0D
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
 	bne     L012E
 	inx
-L012E:	ldy     #$55
+L012E:	ldy     #$56
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$56
+	ldy     #$57
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$00
 	lda     #$00
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$60
+	ldy     #$61
 	jsr     addysp
 	rts
 

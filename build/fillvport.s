@@ -16,7 +16,19 @@
 	.import		_vport_top
 	.import		_vport_bot
 	.import		_expand_string
+	.export		_debug_vport_top
+	.export		_debug_dist_dwn
+	.export		_debug_cur_ycor
 	.export		_fill_vport
+
+.segment	"BSS"
+
+_debug_vport_top:
+	.res	1,$00
+_debug_dist_dwn:
+	.res	1,$00
+_debug_cur_ycor:
+	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; unsigned char __near__ fill_vport (__near__ struct fileinfo *)
@@ -29,7 +41,7 @@
 .segment	"CODE"
 
 	jsr     pushax
-	ldy     #$5A
+	ldy     #$5B
 	jsr     subysp
 	lda     _vport_bot
 	ldx     _vport_bot+1
@@ -41,9 +53,9 @@
 	ldy     #$00
 	jsr     ldauidx
 	jsr     tossubax
-	ldy     #$58
+	ldy     #$59
 	jsr     staxysp
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -52,14 +64,14 @@
 	ldy     #$2B
 	jsr     ldauidx
 	jsr     pushax
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     tosugtax
 	jeq     L0007
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     decax1
 	ldx     #$00
@@ -72,7 +84,7 @@
 	pla
 	ldy     #$2B
 	jsr     staspidx
-L0007:	ldy     #$5B
+L0007:	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -81,7 +93,7 @@ L0007:	ldy     #$5B
 	ldy     #$2A
 	jsr     ldaxidx
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -91,10 +103,10 @@ L0007:	ldy     #$5B
 	jsr     ldauidx
 	jsr     tosultax
 	jeq     L000B
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -115,8 +127,22 @@ L000B:	lda     _vport_top
 	ldx     _vport_top+1
 	ldy     #$00
 	jsr     ldauidx
+	sta     _debug_vport_top
+	ldy     #$5C
+	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5D
+	ldx     #$04
+	lda     #$00
+	jsr     tosaddax
+	ldy     #$2B
+	jsr     ldauidx
+	sta     _debug_dist_dwn
+	lda     _vport_top
+	ldx     _vport_top+1
+	ldy     #$00
+	jsr     ldauidx
+	jsr     pushax
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -126,12 +152,16 @@ L000B:	lda     _vport_top
 	jsr     ldauidx
 	jsr     tosaddax
 	ldx     #$00
-	ldy     #$51
+	ldy     #$52
 	sta     (sp),y
-	ldy     #$59
+	ldy     #$52
+	ldx     #$00
+	lda     (sp),y
+	sta     _debug_cur_ycor
+	ldy     #$5A
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -140,12 +170,12 @@ L000B:	lda     _vport_top
 	ldy     #$2B
 	jsr     ldauidx
 	jsr     tossubax
-	ldy     #$56
+	ldy     #$57
 	jsr     staxysp
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -154,7 +184,7 @@ L000B:	lda     _vport_top
 	ldy     #$2A
 	jsr     ldaxidx
 	jsr     pushax
-	ldy     #$5F
+	ldy     #$60
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -172,10 +202,10 @@ L000B:	lda     _vport_top
 	pla
 	ldy     #$2D
 	jsr     staxspidx
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -184,7 +214,7 @@ L000B:	lda     _vport_top
 	ldy     #$2A
 	jsr     ldaxidx
 	jsr     pushax
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     decax1
 	jsr     tosaddax
@@ -197,7 +227,7 @@ L000B:	lda     _vport_top
 	pla
 	ldy     #$2F
 	jsr     staxspidx
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -205,46 +235,46 @@ L000B:	lda     _vport_top
 	jsr     tosaddax
 	ldy     #$2E
 	jsr     ldaxidx
-	ldy     #$54
+	ldy     #$55
 	jsr     staxysp
 	lda     _vport_top
 	ldx     _vport_top+1
 	ldy     #$00
 	jsr     ldauidx
 	ldx     #$00
-	ldy     #$52
-	jsr     staxysp
-	jmp     L001E
-L001C:	lda     #$00
-	jsr     pusha
 	ldy     #$53
+	jsr     staxysp
+	jmp     L0024
+L0022:	lda     #$00
+	jsr     pusha
+	ldy     #$54
 	lda     (sp),y
 	jsr     _gotoxy
-	ldy     #$5B
+	ldy     #$5C
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
 	jsr     pushax
-	ldy     #$57
+	ldy     #$58
 	jsr     ldaxysp
 	jsr     aslax1
 	jsr     tosaddax
 	ldy     #$01
 	jsr     ldaxidx
 	cpx     #$00
-	bne     L0029
+	bne     L002F
 	cmp     #$00
-L0029:	jsr     boolne
-	jeq     L0026
+L002F:	jsr     boolne
+	jeq     L002C
 	lda     sp
 	ldx     sp+1
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
 	jsr     pushax
-	ldy     #$59
+	ldy     #$5A
 	jsr     ldaxysp
 	jsr     aslax1
 	jsr     tosaddax
@@ -254,34 +284,34 @@ L0029:	jsr     boolne
 	lda     sp
 	ldx     sp+1
 	jsr     _print
-	jmp     L0030
-L0026:	jsr     _blank_line
-L0030:	ldy     #$55
+	jmp     L0036
+L002C:	jsr     _blank_line
+L0036:	ldy     #$56
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0033
+	bne     L0039
 	inx
-L0033:	ldy     #$54
+L0039:	ldy     #$55
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$53
+	ldy     #$54
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0035
+	bne     L003B
 	inx
-L0035:	ldy     #$52
+L003B:	ldy     #$53
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-L001E:	ldy     #$55
+L0024:	ldy     #$56
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$5D
+	ldy     #$5E
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -290,30 +320,30 @@ L001E:	ldy     #$55
 	ldy     #$30
 	jsr     ldaxidx
 	jsr     tosleax
-	jeq     L0020
-	ldy     #$55
+	jeq     L0026
+	ldy     #$56
 	jsr     ldaxysp
 	cmp     #$F5
 	txa
 	sbc     #$01
-	bvc     L0021
+	bvc     L0027
 	eor     #$80
-L0021:	asl     a
+L0027:	asl     a
 	lda     #$00
 	ldx     #$00
 	rol     a
-	jne     L001F
-L0020:	ldx     #$00
+	jne     L0025
+L0026:	ldx     #$00
 	lda     #$00
-	jeq     L0022
-L001F:	ldx     #$00
+	jeq     L0028
+L0025:	ldx     #$00
 	lda     #$01
-L0022:	jne     L001C
-	ldy     #$51
+L0028:	jne     L0022
+	ldy     #$52
 	ldx     #$00
 	lda     (sp),y
 	jmp     L0003
-L0003:	ldy     #$5C
+L0003:	ldy     #$5D
 	jsr     addysp
 	rts
 

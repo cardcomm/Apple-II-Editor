@@ -34,29 +34,65 @@ char*	margv[];
 	init_array(file2.index);
 	init_clip();
 
-	file1.edline = 1;	   file2.edline	= 1;
-	file1.dist_dwn = 1;	 file2.dist_dwn	= 1;
 	file1.update = 0;	   file2.update	= 0;
 	file1.x	= 0;			file2.x	= 0;
-
-	/*
-	 * TODO: Original code intentionally preserved.
-	 *
-	 * The original init_ed() uses margv[1] without first checking
-	 * margc. This appears to be a bug if the editor is started
-	 * without a filename argument. Do not change during the initial
-	 * port; revisit after the original program is running.
-	 */
-	strcpy(file1.name, margv[1]);
-
-	message("Loading: ");	println(file1.name);
-	load_file(&file1);	/* load	file1  */
 	
-	if(margc == 3)	{
+	/*
+	 * cc65 / BASIC.SYSTEM compatibility extension:
+	 *
+	 * The original Aztec C environment supplied normal command-line
+	 * arguments, and the recovered editor assumes margv[1] always names
+	 * the first file to load.
+	 *
+	 * Under ProDOS BASIC.SYSTEM the editor may need to be started with
+	 * no filename at all.  In that case create an empty editing buffer
+	 * whose first editable line is index[0].
+	 *
+	 * For a normally loaded file, preserve the original editor behavior:
+	 * edline=1 and dist_dwn=1 place the initial current line one row below
+	 * the top of the viewport.
+	 */
+	
+	if(margc > 1) {
+		strcpy(file1.name, margv[1]);
+	
+		file1.edline = 1;
+		file1.dist_dwn = 1;
+	
+		message("Loading: ");
+		println(file1.name);
+	
+		load_file(&file1);
+	}
+	else {
+		file1.name[0] = 0;
+	
+		file1.edline = 0;
+		file1.dist_dwn = 0;
+	}
+	
+	/*
+	 * Preserve the original two-file startup behavior when two filenames
+	 * are supplied.
+	 */
+	if(margc == 3) {
 		strcpy(file2.name, margv[2]);
-		message("Loading: "); println(file2.name);
-		load_file(&file2);	/* load	file2  */
+	
+		file2.edline = 1;
+		file2.dist_dwn = 1;
+	
+		message("Loading: ");
+		println(file2.name);
+	
+		load_file(&file2);
+	
 		div_line = 12;
+	}
+	else {
+		file2.name[0] = 0;
+	
+		file2.edline = 0;
+		file2.dist_dwn = 0;
 	}
 
 }

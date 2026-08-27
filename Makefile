@@ -58,6 +58,7 @@ $(BINDIR)/$(OUT): $(OBJS) | $(BINDIR)
 		-Wl -S,0x$(LOADADDR) \
 		-Wl -D,__EXEHDR__=0 \
 		-m $(BUILDDIR)/ed.map \
+		-Ln $(BUILDDIR)/ed.lbl \
 		$(OBJS) \
 		-o $(BINDIR)/$(OUT)
 
@@ -67,6 +68,7 @@ deploy: $(BINDIR)/$(OUT)
 	xattr -wx prodos.AuxType $(AUXTYPE) "$(DEST)"
 
 clean:
+	rm -f $(BUILDDIR)/ed.lbl
 	rm -f $(BUILDDIR)/*.o
 	rm -f $(BUILDDIR)/*.s
 	rm -f $(BUILDDIR)/ed.map

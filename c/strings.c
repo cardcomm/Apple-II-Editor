@@ -103,7 +103,12 @@ char*	src;
 	register	char*	dest_ptr;
 	register	char*	src_ptr;
 	register	char*	new_ptr;
-				char	lsrc[81];
+
+/*
+ * Buffer must match LENGTH. expand_string() produces up to
+ * LENGTH-1 display characters plus the terminating NUL.
+ */
+	char lsrc[LENGTH];
 
 	strcpy(lsrc, src); /* copy source string into temp.	string */
 	dest_ptr = dest;	src_ptr	= lsrc;

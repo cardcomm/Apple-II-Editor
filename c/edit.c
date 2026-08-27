@@ -24,14 +24,14 @@ void bell();
 void message();
 int waitkey();
 
-
 /*
 	Function to	edit the current line in the current file. If neccessary,
 	it will	reallocate the memory buffer used to store the line.
 	pass a pointer to the current fileinfo structure
 */
 
-#define STRINGSIZE 81
+#define STRINGSIZE 82
+#define EDIT_MAX_LENGTH 79
 
 struct inpstat* edit(fip)
 struct fileinfo* fip;
@@ -47,14 +47,14 @@ struct fileinfo* fip;
 /* if this line is empty, get user input, then get mem for it */
 
 	if(fip->index[fip->edline] == 0) {
-		for(i=0; i<STRINGSIZE; s1[i++]=' '); /* init s1 */
+		for(i=0; i<STRINGSIZE-1; s1[i++]=' '); /* init s1 */
 		s1[i] = 0;
 
 		gotoxy(0, fip->curln_ycor);
 
 		sp = editline2(
 			s1,
-			(sizeof(s1)-2),
+			EDIT_MAX_LENGTH,
 			fip->x
 		);
 
@@ -87,7 +87,7 @@ struct fileinfo* fip;
 
 		sp = editline2(
 			s1,
-			(sizeof(s1)-2),
+			EDIT_MAX_LENGTH,
 			fip->x
 		);
 

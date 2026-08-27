@@ -21,6 +21,7 @@
 	.import		_bell
 	.import		_message
 	.import		_waitkey
+	.export		_debug_curln_ycor
 	.export		_edit
 
 .segment	"RODATA"
@@ -28,6 +29,11 @@
 L0067:
 	.byte	$46,$69,$6C,$65,$20,$65,$72,$72,$6F,$72,$2E,$00
 L0035	:=	L0067+0
+
+.segment	"BSS"
+
+_debug_curln_ycor:
+	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; __near__ struct inpstat * __near__ edit (__near__ struct fileinfo *)
@@ -40,9 +46,9 @@ L0035	:=	L0067+0
 .segment	"BSS"
 
 L0005:
-	.res	81,$00
+	.res	82,$00
 L0007:
-	.res	81,$00
+	.res	82,$00
 
 .segment	"CODE"
 
@@ -114,6 +120,15 @@ L0018:	jsr     pushax
 	lda     #$00
 	ldy     #$00
 	jsr     staspidx
+	ldy     #$06
+	jsr     ldaxysp
+	jsr     pushax
+	ldx     #$04
+	lda     #$00
+	jsr     tosaddax
+	ldy     #$2C
+	jsr     ldauidx
+	sta     _debug_curln_ycor
 	lda     #$00
 	jsr     pusha
 	ldy     #$07
@@ -267,6 +282,15 @@ L0008:	lda     #<(L0005)
 	ldy     #$01
 	jsr     ldaxidx
 	jsr     _expand_string
+	ldy     #$06
+	jsr     ldaxysp
+	jsr     pushax
+	ldx     #$04
+	lda     #$00
+	jsr     tosaddax
+	ldy     #$2C
+	jsr     ldauidx
+	sta     _debug_curln_ycor
 	lda     #$00
 	jsr     pusha
 	ldy     #$07
