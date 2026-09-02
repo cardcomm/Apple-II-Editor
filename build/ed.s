@@ -87,10 +87,19 @@ _is_ptr:
 
 .segment	"CODE"
 
-	ldy     #$03
+	jsr     decsp2
+	ldy     #$05
+	jsr     ldaxysp
+	cpx     #$00
+	bne     L0011
+	cmp     #$01
+L0011:	jsr     booleq
+	ldy     #$00
+	jsr     staxysp
+	ldy     #$05
 	jsr     ldaxysp
 	jsr     pushax
-	ldy     #$03
+	ldy     #$05
 	jsr     ldaxysp
 	jsr     _init_ed
 	lda     _fip1
@@ -99,21 +108,29 @@ _is_ptr:
 	lda     _fip2
 	ldx     _fip2+1
 	jsr     _drawscrn
-L0011:	ldx     #$00
+	ldy     #$01
+	lda     (sp),y
+	dey
+	ora     (sp),y
+	jeq     L0018
+	lda     #<(_file1)
+	ldx     #>(_file1)
+	jsr     _do_load
+L0018:	ldx     #$00
 	lda     _vport_actv
 	cmp     #$01
 	jsr     booleq
-	jeq     L0014
+	jeq     L001F
 	lda     #<(_file1)
 	ldx     #>(_file1)
 	sta     _fip
 	stx     _fip+1
-	jmp     L0018
-L0014:	lda     #<(_file2)
+	jmp     L0023
+L001F:	lda     #<(_file2)
 	ldx     #>(_file2)
 	sta     _fip
 	stx     _fip+1
-L0018:	lda     _fip
+L0023:	lda     _fip
 	ldx     _fip+1
 	jsr     _edit
 	sta     _is_ptr
@@ -122,183 +139,183 @@ L0018:	lda     _fip
 	ldx     _is_ptr+1
 	ldy     #$02
 	jsr     ldauidx
-	jmp     L001F
-L001F:	cmp     #$0A
-	jeq     L0022
+	jmp     L002A
+L002A:	cmp     #$0A
+	jeq     L002D
 	cmp     #$0B
-	jeq     L002E
+	jeq     L0039
 	cmp     #$0D
-	jeq     L003A
-	jmp     L0020
-L0022:	lda     _is_ptr
+	jeq     L0045
+	jmp     L002B
+L002D:	lda     _is_ptr
 	ldx     _is_ptr+1
 	ldy     #$00
 	jsr     ldauidx
 	cmp     #$A0
 	jsr     boolne
-	jeq     L0023
-	jmp     L0020
-L0023:	jsr     _send_highlight
+	jeq     L002E
+	jmp     L002B
+L002E:	jsr     _send_highlight
 	stx     tmp1
 	ora     tmp1
-	jeq     L0025
+	jeq     L0030
 	lda     _fip
 	ldx     _fip+1
 	jsr     _select
-	jmp     L002A
-L0025:	lda     _fip
+	jmp     L0035
+L0030:	lda     _fip
 	ldx     _fip+1
 	jsr     _move_dn
-L002A:	jmp     L0020
-L002E:	lda     _is_ptr
+L0035:	jmp     L002B
+L0039:	lda     _is_ptr
 	ldx     _is_ptr+1
 	ldy     #$00
 	jsr     ldauidx
 	cmp     #$A0
 	jsr     boolne
-	jeq     L002F
-	jmp     L0020
-L002F:	jsr     _send_highlight
+	jeq     L003A
+	jmp     L002B
+L003A:	jsr     _send_highlight
 	stx     tmp1
 	ora     tmp1
-	jeq     L0031
+	jeq     L003C
 	lda     _fip
 	ldx     _fip+1
 	jsr     _deselect
-	jmp     L0036
-L0031:	lda     _fip
+	jmp     L0041
+L003C:	lda     _fip
 	ldx     _fip+1
 	jsr     _move_up
-L0036:	jmp     L0020
-L003A:	lda     _fip
+L0041:	jmp     L002B
+L0045:	lda     _fip
 	ldx     _fip+1
 	jsr     _insert
-	jmp     L0020
-L0020:	lda     _is_ptr
+	jmp     L002B
+L002B:	lda     _is_ptr
 	ldx     _is_ptr+1
 	ldy     #$00
 	jsr     ldauidx
-	jmp     L003E
-L003E:	cmp     #$43
-	jeq     L006F
+	jmp     L0049
+L0049:	cmp     #$43
+	jeq     L007A
 	cmp     #$44
-	jeq     L0041
+	jeq     L004C
 	cmp     #$46
-	jeq     L0047
+	jeq     L0052
 	cmp     #$47
-	jeq     L0069
+	jeq     L0074
 	cmp     #$49
-	jeq     L0085
+	jeq     L0090
 	cmp     #$4A
-	jeq     L0064
-	cmp     #$4C
-	jeq     L0059
-	cmp     #$50
-	jeq     L0075
-	cmp     #$51
-	jeq     L0093
-	cmp     #$52
-	jeq     L004D
-	cmp     #$53
-	jeq     L0053
-	cmp     #$56
-	jeq     L0075
-	cmp     #$57
-	jeq     L005F
-	cmp     #$58
-	jeq     L007F
-	cmp     #$63
 	jeq     L006F
-	cmp     #$64
-	jeq     L0041
-	cmp     #$66
-	jeq     L0047
-	cmp     #$67
-	jeq     L0069
-	cmp     #$69
-	jeq     L0085
-	cmp     #$6A
+	cmp     #$4C
 	jeq     L0064
+	cmp     #$50
+	jeq     L0080
+	cmp     #$51
+	jeq     L009E
+	cmp     #$52
+	jeq     L0058
+	cmp     #$53
+	jeq     L005E
+	cmp     #$56
+	jeq     L0080
+	cmp     #$57
+	jeq     L006A
+	cmp     #$58
+	jeq     L008A
+	cmp     #$63
+	jeq     L007A
+	cmp     #$64
+	jeq     L004C
+	cmp     #$66
+	jeq     L0052
+	cmp     #$67
+	jeq     L0074
+	cmp     #$69
+	jeq     L0090
+	cmp     #$6A
+	jeq     L006F
 	cmp     #$6C
-	jeq     L0059
+	jeq     L0064
 	cmp     #$70
-	jeq     L0075
+	jeq     L0080
 	cmp     #$71
-	jeq     L0093
+	jeq     L009E
 	cmp     #$72
-	jeq     L004D
+	jeq     L0058
 	cmp     #$73
-	jeq     L0053
+	jeq     L005E
 	cmp     #$76
-	jeq     L0075
+	jeq     L0080
 	cmp     #$77
-	jeq     L005F
+	jeq     L006A
 	cmp     #$78
-	jeq     L007F
+	jeq     L008A
 	cmp     #$8A
-	jeq     L008B
+	jeq     L0096
 	cmp     #$8B
-	jeq     L008F
-	jmp     L003F
-L0041:	lda     _fip
+	jeq     L009A
+	jmp     L004A
+L004C:	lda     _fip
 	ldx     _fip+1
 	jsr     _delete
-	jmp     L003F
-L0047:	lda     _fip
+	jmp     L004A
+L0052:	lda     _fip
 	ldx     _fip+1
 	jsr     _do_search
-	jmp     L003F
-L004D:	lda     _fip
+	jmp     L004A
+L0058:	lda     _fip
 	ldx     _fip+1
 	jsr     _replace
-	jmp     L003F
-L0053:	lda     _fip
+	jmp     L004A
+L005E:	lda     _fip
 	ldx     _fip+1
 	jsr     _do_save
-	jmp     L003F
-L0059:	lda     _fip
+	jmp     L004A
+L0064:	lda     _fip
 	ldx     _fip+1
 	jsr     _do_load
-	jmp     L003F
-L005F:	jsr     _set_div_ln
-	jmp     L003F
-L0064:	jsr     _jump
-	jmp     L003F
-L0069:	lda     _fip
+	jmp     L004A
+L006A:	jsr     _set_div_ln
+	jmp     L004A
+L006F:	jsr     _jump
+	jmp     L004A
+L0074:	lda     _fip
 	ldx     _fip+1
 	jsr     _gotoline
-	jmp     L003F
-L006F:	lda     _fip
+	jmp     L004A
+L007A:	lda     _fip
 	ldx     _fip+1
 	jsr     _copy
-	jmp     L003F
-L0075:	lda     _fip
+	jmp     L004A
+L0080:	lda     _fip
 	ldx     _fip+1
 	jsr     _paste
-	jmp     L003F
-L007F:	lda     _fip
+	jmp     L004A
+L008A:	lda     _fip
 	ldx     _fip+1
 	jsr     _cut
-	jmp     L003F
-L0085:	lda     _fip
+	jmp     L004A
+L0090:	lda     _fip
 	ldx     _fip+1
 	jsr     _show_fileinfo
-	jmp     L003F
-L008B:	lda     _fip
+	jmp     L004A
+L0096:	lda     _fip
 	ldx     _fip+1
 	jsr     _pagedown
-	jmp     L003F
-L008F:	lda     _fip
+	jmp     L004A
+L009A:	lda     _fip
 	ldx     _fip+1
 	jsr     _pageup
-	jmp     L003F
-L0093:	jsr     _quit
-	jmp     L003F
-L003F:	jmp     L0011
+	jmp     L004A
+L009E:	jsr     _quit
+	jmp     L004A
+L004A:	jmp     L0018
 	ldx     #$00
 	lda     #$00
-	jmp     L000A
-L000A:	jsr     incsp4
+	jmp     L000D
+L000D:	jsr     incsp6
 	rts
 
 .endproc

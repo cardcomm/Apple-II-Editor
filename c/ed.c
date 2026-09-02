@@ -5,6 +5,8 @@ This	is the main	module of my very own programmer's text	editor.	*/
 
 #include	"ed.h"
 #include <stdio.h>
+#include <string.h>
+#include <apple2enh.h>
 
 /*
 	global data	declarations
@@ -66,12 +68,21 @@ int pageup();
 int quit();
 
 int main(argc,argv)
-int	argc;
-char	*argv[];
+int argc;
+char *argv[];
 {
+	// Modification from original code
+    int prompt_load;
+    prompt_load = (argc == 1); // save arg count for later
+
 	init_ed(argc, argv);
 
 	drawscrn(fip1, fip2);
+	
+	// Modification from original code - if no cmd line args, prompt to load file
+	//		under ProDOS basic.system, command line args are not supported
+	if(prompt_load)
+		do_load(&file1);
 
 	do	{
 
