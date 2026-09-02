@@ -8,6 +8,7 @@
 extern	char	tabstops[];		/* defined in the "strings.c" source file */
 
 void message();
+void drawscrn();
 int waitkey();
 
 int search_string();
@@ -29,27 +30,79 @@ static	char	pat[] =	"is";
 */
 
 void do_search(fip)
-struct	fileinfo	*fip;
+struct fileinfo *fip;
 {
-	register	char	*t;
-	static		struct	inpstat		*sp;
-	static		char	pattern[50];
-	static		int		search_line;
-	static		int		offset;
+    register char *t;
+    static struct inpstat *sp;
+    static char pattern[50];
+    register int search_line;
+    register int offset;
 
+    message("Enter search string:");
 
-	message("Enter search string:");
-	sp = editline(pattern, (sizeof(pattern)-2) );
+    sp = editline(
+        pattern,
+        (sizeof(pattern) - 2)
+    );
 
-	for(t=pattern+(sizeof(pattern)-2); *t==0x20; t--);
-	t++;
-	*t = 0;		/* put 0 after last	space */
+    if(sp->esc_stat)
+        return;
 
-	search_line	= fip->edline;
-	offset = search_string(fip->index[search_line],	pattern);
-	fip->x = offset;
-	debug(offset);
+    /*
+     * editline() pads the input with spaces.
+     * Terminate after the last non-space character.
+     */
+    for(t = pattern + (sizeof(pattern) - 2);
+        t >= pattern && *t == 0x20;
+        t--)
+        ;
 
+    t++;
+    *t = 0;
+
+    /*
+     * Don't search for an empty string.
+     */
+    if(pattern[0] == 0)
+        return;
+
+    /*
+     * Search the current line and then each following line
+     * until EOF.
+     */
+    search_line = fip->edline;
+
+    while(search_line < max_lines &&
+          fip->index[search_line] != 0) {
+
+        offset = search_string(
+            fip->index[search_line],
+            pattern
+        );
+
+	if(offset >= 0) {
+	
+		/*
+		 * If the matching line is already visible, keep the
+		 * viewport where it is and move only the cursor.
+		 */
+		if(search_line >= fip->topline &&
+		   search_line <= fip->botline) {
+	
+			fip->dist_dwn = search_line - fip->topline;
+		}
+	
+		fip->edline = search_line;
+		fip->x = offset;
+	
+		drawscrn();
+		return;
+	}
+
+        search_line++;
+    }
+
+    message("Not found.");
 }
 
 /*
@@ -61,26 +114,34 @@ struct	fileinfo	*fip;
 	2. pointer to pattern to look for.
 
 	Returns	offset into	the	string of the first	char. of found match
-	 if	no match, 0	is returned
+	 if	no match, -1	is returned
 */
 
 int search_string(string, pattern)
-char*	string;
-char*	pattern;
+char *string;
+char *pattern;
 {
-	register	char	*str_start;
+    register char *str_start;
 
-	str_start =	string;
-	while(*string != '\n')	{
-		if(*string == *pattern || *string == (*pattern)-32)	{
-			if(check_match(string, pattern)) {
-				return(calc_offset(	str_start, string) );	/* match found */
-			}
+    str_start = string;
 
-		}
-		string++;
-	}
-	return(0);	/* no match	found */
+    while(*string != '\r' && *string != 0) {
+
+        if(*string == *pattern ||
+           *string == (*pattern)-32) {
+
+            if(check_match(string, pattern)) {
+
+                return(
+                    calc_offset(str_start, string)
+                );
+            }
+        }
+
+        string++;
+    }
+
+    return(-1); // no match found
 }
 
 /*
@@ -94,18 +155,25 @@ char*	pattern;
 */
 
 int check_match(s, p)
-char	*s,	*p;
+char *s, *p;
 {
-	s++;
-	p++;
-	while( (*p)	)	{
-		if(*s == *p	|| *s == (*p)-32 )	{
-			p++; s++;
-		}
-		else	return(FALSE); /* no match */
+    s++;
+    p++;
 
-	}
-	return(TRUE);	/* match found */
+    while(*p) {
+
+        if(*s == '\r' || *s == 0)
+            return(FALSE);
+
+        if(*s == *p || *s == (*p)-32) {
+            p++;
+            s++;
+        }
+        else
+            return(FALSE);
+    }
+
+    return(TRUE);
 }
 
 

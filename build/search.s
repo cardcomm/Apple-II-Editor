@@ -15,6 +15,7 @@
 	.import		_printf
 	.import		_tabstops
 	.import		_message
+	.import		_drawscrn
 	.import		_waitkey
 	.export		_search_string
 	.export		_check_match
@@ -24,12 +25,14 @@
 
 .segment	"RODATA"
 
-L000A:
+L0008:
 	.byte	$45,$6E,$74,$65,$72,$20,$73,$65,$61,$72,$63,$68,$20,$73,$74,$72
 	.byte	$69,$6E,$67,$3A,$00
-L0084:
+L0045:
+	.byte	$4E,$6F,$74,$20,$66,$6F,$75,$6E,$64,$2E,$00
+L00A6:
 	.byte	$25,$64,$00
-L0081:
+L00A3:
 	.byte	$20,$00
 
 ; ---------------------------------------------------------------
@@ -48,8 +51,8 @@ L0081:
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     staxysp
-	jmp     L0030
-L002E:	ldy     #$05
+	jmp     L004C
+L004A:	ldy     #$05
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
@@ -59,7 +62,7 @@ L002E:	ldy     #$05
 	ldy     #$00
 	jsr     ldauidx
 	jsr     toseqax
-	jne     L0033
+	jne     L0051
 	ldy     #$05
 	jsr     ldaxysp
 	ldy     #$00
@@ -72,13 +75,13 @@ L002E:	ldy     #$05
 	ldy     #$20
 	jsr     decaxy
 	jsr     toseqax
-	jne     L0033
+	jne     L0051
 	ldx     #$00
 	lda     #$00
-	jeq     L0035
-L0033:	ldx     #$00
+	jeq     L0053
+L0051:	ldx     #$00
 	lda     #$01
-L0035:	jeq     L0036
+L0053:	jeq     L0054
 	ldy     #$05
 	jsr     ldaxysp
 	jsr     pushax
@@ -87,36 +90,49 @@ L0035:	jeq     L0036
 	jsr     _check_match
 	stx     tmp1
 	ora     tmp1
-	jeq     L0036
+	jeq     L0054
 	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$07
 	jsr     ldaxysp
 	jsr     _calc_offset
-	jmp     L002B
-L0036:	ldy     #$05
+	jmp     L0047
+L0054:	ldy     #$05
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L003F
+	bne     L005D
 	inx
-L003F:	ldy     #$04
+L005D:	ldy     #$04
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-L0030:	ldy     #$05
+L004C:	ldy     #$05
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
-	cmp     #$0A
+	cmp     #$0D
 	jsr     boolne
-	jne     L002E
-	ldx     #$00
+	jeq     L004E
+	ldy     #$05
+	jsr     ldaxysp
+	ldy     #$00
+	jsr     ldauidx
+	cmp     #$00
+	jsr     boolne
+	jne     L004D
+L004E:	ldx     #$00
 	lda     #$00
-	jmp     L002B
-L002B:	jsr     incsp6
+	jeq     L004F
+L004D:	ldx     #$00
+	lda     #$01
+L004F:	jne     L004A
+	ldx     #$FF
+	lda     #$FF
+	jmp     L0047
+L0047:	jsr     incsp6
 	rts
 
 .endproc
@@ -137,9 +153,9 @@ L002B:	jsr     incsp6
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0044
+	bne     L0062
 	inx
-L0044:	ldy     #$02
+L0062:	ldy     #$02
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
@@ -148,14 +164,37 @@ L0044:	ldy     #$02
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0046
+	bne     L0064
 	inx
-L0046:	ldy     #$00
+L0064:	ldy     #$00
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	jmp     L0054
-L0047:	ldy     #$03
+	jmp     L0076
+L0065:	ldy     #$03
+	jsr     ldaxysp
+	ldy     #$00
+	jsr     ldauidx
+	cmp     #$0D
+	jsr     booleq
+	jne     L006A
+	ldy     #$03
+	jsr     ldaxysp
+	ldy     #$00
+	jsr     ldauidx
+	cmp     #$00
+	jsr     booleq
+	jne     L006A
+	ldx     #$00
+	lda     #$00
+	jeq     L006B
+L006A:	ldx     #$00
+	lda     #$01
+L006B:	jeq     L0069
+	ldx     #$00
+	lda     #$00
+	jmp     L0060
+L0069:	ldy     #$03
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
@@ -165,7 +204,7 @@ L0047:	ldy     #$03
 	ldy     #$00
 	jsr     ldauidx
 	jsr     toseqax
-	jne     L004D
+	jne     L006F
 	ldy     #$03
 	jsr     ldaxysp
 	ldy     #$00
@@ -178,21 +217,21 @@ L0047:	ldy     #$03
 	ldy     #$20
 	jsr     decaxy
 	jsr     toseqax
-	jne     L004D
+	jne     L006F
 	ldx     #$00
 	lda     #$00
-	jeq     L004F
-L004D:	ldx     #$00
+	jeq     L0071
+L006F:	ldx     #$00
 	lda     #$01
-L004F:	jeq     L004C
+L0071:	jeq     L006E
 	ldy     #$01
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0051
+	bne     L0073
 	inx
-L0051:	ldy     #$00
+L0073:	ldy     #$00
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
@@ -201,25 +240,25 @@ L0051:	ldy     #$00
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0053
+	bne     L0075
 	inx
-L0053:	ldy     #$02
+L0075:	ldy     #$02
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	jmp     L0054
-L004C:	ldx     #$00
+	jmp     L0076
+L006E:	ldx     #$00
 	lda     #$00
-	jmp     L0042
-L0054:	ldy     #$01
+	jmp     L0060
+L0076:	ldy     #$01
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
-	jne     L0047
+	jne     L0065
 	ldx     #$00
 	lda     #$01
-	jmp     L0042
-L0042:	jsr     incsp4
+	jmp     L0060
+L0060:	jsr     incsp4
 	rts
 
 .endproc
@@ -240,14 +279,14 @@ L0042:	jsr     incsp4
 	lda     #$00
 	ldy     #$04
 	jsr     staxysp
-	jmp     L0072
-L005C:	ldy     #$09
+	jmp     L0094
+L007E:	ldy     #$09
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	cmp     #$09
 	jsr     booleq
-	jeq     L0060
+	jeq     L0082
 	lda     #<(_tabstops)
 	ldx     #>(_tabstops)
 	ldy     #$04
@@ -271,22 +310,22 @@ L005C:	ldy     #$09
 	lda     #$00
 	ldy     #$00
 	jsr     staxysp
-L0065:	ldy     #$01
+L0087:	ldy     #$01
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$05
 	jsr     ldaxysp
 	jsr     tosltax
-	jne     L0068
-	jmp     L0066
-L0068:	ldy     #$05
+	jne     L008A
+	jmp     L0088
+L008A:	ldy     #$05
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L006F
+	bne     L0091
 	inx
-L006F:	ldy     #$04
+L0091:	ldy     #$04
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
@@ -295,33 +334,33 @@ L006F:	ldy     #$04
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L006D
+	bne     L008F
 	inx
-L006D:	ldy     #$00
+L008F:	ldy     #$00
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	jmp     L0065
-L0066:	ldy     #$09
+	jmp     L0087
+L0088:	ldy     #$09
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0071
+	bne     L0093
 	inx
-L0071:	ldy     #$08
+L0093:	ldy     #$08
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	jmp     L0072
-L0060:	ldy     #$05
+	jmp     L0094
+L0082:	ldy     #$05
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0074
+	bne     L0096
 	inx
-L0074:	ldy     #$04
+L0096:	ldy     #$04
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
@@ -330,23 +369,23 @@ L0074:	ldy     #$04
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L0076
+	bne     L0098
 	inx
-L0076:	ldy     #$08
+L0098:	ldy     #$08
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-L0072:	ldy     #$09
+L0094:	ldy     #$09
 	jsr     ldaxysp
 	jsr     pushax
 	ldy     #$09
 	jsr     ldaxysp
 	jsr     tosultax
-	jne     L005C
+	jne     L007E
 	ldy     #$05
 	jsr     ldaxysp
-	jmp     L0059
-L0059:	ldy     #$0A
+	jmp     L007B
+L007B:	ldy     #$0A
 	jsr     addysp
 	rts
 
@@ -382,11 +421,11 @@ L0059:	ldy     #$0A
 	jsr     ldauidx
 	ldy     #$00
 	sta     (sp),y
-	lda     #<(L0081)
-	ldx     #>(L0081)
+	lda     #<(L00A3)
+	ldx     #>(L00A3)
 	jsr     _message
-	lda     #<(L0084)
-	ldx     #>(L0084)
+	lda     #<(L00A6)
+	ldx     #>(L00A6)
 	jsr     pushax
 	ldy     #$09
 	jsr     ldaxysp
@@ -419,17 +458,13 @@ L0004:
 	.res	2,$00
 L0006:
 	.res	50,$00
-L0007:
-	.res	2,$00
-L0008:
-	.res	2,$00
 
 .segment	"CODE"
 
 	jsr     pushax
-	jsr     decsp2
-	lda     #<(L000A)
-	ldx     #>(L000A)
+	jsr     decsp6
+	lda     #<(L0008)
+	ldx     #>(L0008)
 	jsr     _message
 	lda     #<(L0006)
 	ldx     #>(L0006)
@@ -438,47 +473,72 @@ L0008:
 	jsr     _editline
 	sta     L0004
 	stx     L0004+1
-	lda     #<(L0006+48)
+	lda     L0004
+	ldx     L0004+1
+	ldy     #$01
+	jsr     ldauidx
+	jeq     L0010
+	jmp     L0003
+L0010:	lda     #<(L0006+48)
 	ldx     #>(L0006+48)
-	ldy     #$00
+	ldy     #$04
 	jsr     staxysp
-L0012:	ldy     #$01
+L0012:	ldy     #$05
+	jsr     ldaxysp
+	jsr     pushax
+	lda     #<(L0006)
+	ldx     #>(L0006)
+	jsr     tosugeax
+	jeq     L001B
+	ldy     #$05
 	jsr     ldaxysp
 	ldy     #$00
 	jsr     ldauidx
 	cmp     #$20
 	jsr     booleq
-	jne     L0014
+	jne     L001A
+L001B:	ldx     #$00
+	lda     #$00
+	jeq     L001C
+L001A:	ldx     #$00
+	lda     #$01
+L001C:	jne     L0014
 	jmp     L0013
-L0014:	ldy     #$01
+L0014:	ldy     #$05
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	jsr     decax1
-	ldy     #$00
+	ldy     #$04
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
 	jmp     L0012
-L0013:	ldy     #$01
+L0013:	ldy     #$05
 	jsr     ldaxysp
 	sta     regsave
 	stx     regsave+1
 	ina
-	bne     L001D
+	bne     L001F
 	inx
-L001D:	ldy     #$00
+L001F:	ldy     #$04
 	jsr     staxysp
 	lda     regsave
 	ldx     regsave+1
-	ldy     #$01
+	ldy     #$05
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$00
 	lda     #$00
 	ldy     #$00
 	jsr     staspidx
-	ldy     #$03
+	ldx     #$00
+	lda     L0006
+	cmp     #$00
+	jsr     booleq
+	jeq     L0022
+	jmp     L0003
+L0022:	ldy     #$07
 	jsr     ldaxysp
 	jsr     pushax
 	ldx     #$04
@@ -486,15 +546,16 @@ L001D:	ldy     #$00
 	jsr     tosaddax
 	ldy     #$2A
 	jsr     ldaxidx
-	sta     L0007
-	stx     L0007+1
-	ldy     #$03
+	ldy     #$02
+	jsr     staxysp
+	jmp     L0029
+L0027:	ldy     #$07
 	jsr     ldaxysp
 	ldy     #$41
 	jsr     incaxy
 	jsr     pushax
-	lda     L0007
-	ldx     L0007+1
+	ldy     #$05
+	jsr     ldaxysp
 	jsr     aslax1
 	jsr     tosaddax
 	ldy     #$01
@@ -503,13 +564,90 @@ L001D:	ldy     #$00
 	lda     #<(L0006)
 	ldx     #>(L0006)
 	jsr     _search_string
-	sta     L0008
-	stx     L0008+1
+	ldy     #$00
+	jsr     staxysp
+	ldy     #$01
+	jsr     ldaxysp
+	txa
+	jsr     boolge
+	jeq     L0035
 	ldy     #$03
 	jsr     ldaxysp
 	jsr     pushax
+	ldy     #$09
+	jsr     ldaxysp
+	jsr     pushax
+	ldx     #$04
+	lda     #$00
+	jsr     tosaddax
+	ldy     #$2E
+	jsr     ldaxidx
+	jsr     tosgeax
+	jeq     L0039
+	ldy     #$03
+	jsr     ldaxysp
+	jsr     pushax
+	ldy     #$09
+	jsr     ldaxysp
+	jsr     pushax
+	ldx     #$04
+	lda     #$00
+	jsr     tosaddax
+	ldy     #$30
+	jsr     ldaxidx
+	jsr     tosleax
+	jne     L0038
+L0039:	ldx     #$00
+	lda     #$00
+	jeq     L003A
+L0038:	ldx     #$00
+	lda     #$01
+L003A:	jeq     L0037
+	ldy     #$07
+	jsr     ldaxysp
+	jsr     pushax
+	ldy     #$05
+	jsr     ldaxysp
+	jsr     pushax
+	ldy     #$0B
+	jsr     ldaxysp
+	jsr     pushax
+	ldx     #$04
+	lda     #$00
+	jsr     tosaddax
+	ldy     #$2E
+	jsr     ldaxidx
+	jsr     tossubax
 	ldx     #$00
-	lda     L0008
+	ldy     #$01
+	clc
+	pha
+	lda     #$04
+	adc     (sp),y
+	sta     (sp),y
+	pla
+	ldy     #$2B
+	jsr     staspidx
+L0037:	ldy     #$07
+	jsr     ldaxysp
+	jsr     pushax
+	ldy     #$05
+	jsr     ldaxysp
+	ldy     #$01
+	clc
+	pha
+	lda     #$04
+	adc     (sp),y
+	sta     (sp),y
+	pla
+	ldy     #$29
+	jsr     staxspidx
+	ldy     #$07
+	jsr     ldaxysp
+	jsr     pushax
+	ldy     #$02
+	ldx     #$00
+	lda     (sp),y
 	ldy     #$01
 	clc
 	pha
@@ -519,10 +657,57 @@ L001D:	ldy     #$00
 	pla
 	ldy     #$33
 	jsr     staspidx
-	lda     L0008
-	ldx     L0008+1
-	jsr     _debug
-	jsr     incsp4
+	jsr     _drawscrn
+	jmp     L0003
+L0035:	ldy     #$03
+	jsr     ldaxysp
+	sta     regsave
+	stx     regsave+1
+	ina
+	bne     L0043
+	inx
+L0043:	ldy     #$02
+	jsr     staxysp
+	lda     regsave
+	ldx     regsave+1
+L0029:	ldy     #$03
+	jsr     ldaxysp
+	cmp     #$F4
+	txa
+	sbc     #$01
+	bvc     L002B
+	eor     #$80
+L002B:	asl     a
+	lda     #$00
+	ldx     #$00
+	rol     a
+	jeq     L002C
+	ldy     #$07
+	jsr     ldaxysp
+	ldy     #$41
+	jsr     incaxy
+	jsr     pushax
+	ldy     #$05
+	jsr     ldaxysp
+	jsr     aslax1
+	jsr     tosaddax
+	ldy     #$01
+	jsr     ldaxidx
+	cpx     #$00
+	bne     L002E
+	cmp     #$00
+L002E:	jsr     boolne
+	jne     L002A
+L002C:	ldx     #$00
+	lda     #$00
+	jeq     L002F
+L002A:	ldx     #$00
+	lda     #$01
+L002F:	jne     L0027
+	lda     #<(L0045)
+	ldx     #>(L0045)
+	jsr     _message
+L0003:	jsr     incsp8
 	rts
 
 .endproc
