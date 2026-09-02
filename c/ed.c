@@ -73,7 +73,7 @@ char *argv[];
 {
 	// Modification from original code
     int prompt_load;
-    prompt_load = (argc == 1); // save arg count for later
+    prompt_load = (argc == 1); // save arg flag = true if no args
 
 	init_ed(argc, argv);
 
